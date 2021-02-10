@@ -3,11 +3,20 @@ version: "3"
 services:
   chirpstack-network-server:
     image: chirpstack/chirpstack-network-server:3
+    depends_on:
+      - "postgresql"
+      - "redis"
+      - "mosquitto"
+      - "chirpstack-application-server"
     volumes:
       - ./configuration/chirpstack-network-server:/etc/chirpstack-network-server
 
   chirpstack-application-server:
     image: chirpstack/chirpstack-application-server:3
+    depends_on:
+      - "postgresql"
+      - "redis"
+      - "mosquitto"
     ports:
       - 8080:8080
     volumes:
@@ -15,6 +24,10 @@ services:
 
   chirpstack-gateway-bridge:
     image: chirpstack/chirpstack-gateway-bridge:3
+    depends_on:
+      - "postgresql"
+      - "redis"
+      - "mosquitto"
     ports:
       - 1700:1700/udp
     volumes:
@@ -22,6 +35,10 @@ services:
 
   chirpstack-geolocation-server:
     image: chirpstack/chirpstack-geolocation-server:3
+    depends_on:
+      - "postgresql"
+      - "redis"
+      - "mosquitto"
     volumes:
       - ./configuration/chirpstack-geolocation-server:/etc/chirpstack-geolocation-server
 
@@ -39,7 +56,7 @@ services:
       - redisdata:/data
 
   mosquitto:
-    image: eclipse-mosquitto
+    image: vimagick/mosquitto:latest
     ports:
       - 1883:1883
 
